@@ -33,7 +33,7 @@
     </developers>
     <scm>
         <connection>scm:git:git@github.com:congnghia0609/ntc-jkafka.git</connection>
-        <developerConnection>scm:git:ssh://github.com:congnghia0609/ntc-jkafka.gi</developerConnection>
+        <developerConnection>scm:git:ssh://github.com:congnghia0609/ntc-jkafka.git</developerConnection>
         <url>https://github.com/congnghia0609/ntc-jkafka/tree/master</url>
     </scm>
     <distributionManagement>
