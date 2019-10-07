@@ -19,13 +19,17 @@ package com.ntc.kafka.consumer;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+/**
+ *
+ * @author nghiatc
+ * @since Sep 16, 2015
+ */
 public abstract class ConsumerService {
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	private int numThread = 1;

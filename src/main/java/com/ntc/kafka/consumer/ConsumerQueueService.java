@@ -20,13 +20,16 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import kafka.consumer.KafkaStream;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+/**
+ *
+ * @author nghiatc
+ * @since Sep 16, 2015
+ */
 public class ConsumerQueueService extends ConsumerConnect {
 	private final Logger _logger = LoggerFactory.getLogger(getClass());
 	private List<ConsumerService> consumers = new LinkedList<ConsumerService>();

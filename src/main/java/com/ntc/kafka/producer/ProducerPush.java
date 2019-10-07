@@ -20,6 +20,12 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+/**
+ *
+ * @author nghiatc
+ * @since Sep 16, 2015
+ */
 public class ProducerPush {
 	private static Logger logger = LoggerFactory.getLogger(ProducerPush.class);
 

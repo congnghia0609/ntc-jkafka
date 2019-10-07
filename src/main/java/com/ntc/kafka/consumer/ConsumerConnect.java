@@ -18,11 +18,16 @@ package com.ntc.kafka.consumer;
 
 import com.ntc.configer.NConfig;
 import java.util.Properties;
-
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;
 import kafka.javaapi.consumer.ConsumerConnector;
 
+
+/**
+ *
+ * @author nghiatc
+ * @since Sep 16, 2015
+ */
 public abstract class ConsumerConnect {
 	private final ConsumerConnector consumer;
 

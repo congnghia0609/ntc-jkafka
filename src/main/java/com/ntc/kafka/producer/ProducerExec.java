@@ -19,13 +19,18 @@ package com.ntc.kafka.producer;
 import com.ntc.configer.NConfig;
 import java.util.Properties;
 import java.util.concurrent.Future;
-
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
+
+/**
+ *
+ * @author nghiatc
+ * @since Sep 16, 2015
+ */
 public class ProducerExec {
 
 	private Producer<byte[], byte[]> producer;
