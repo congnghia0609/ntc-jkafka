@@ -15,10 +15,10 @@
  */
 package com.ntc.kafka.consumer;
 
+import com.ntc.kafka.util.KConfig;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -31,40 +31,55 @@ import org.slf4j.LoggerFactory;
  * @author nghiatc
  * @since Jun 7, 2020
  */
-public abstract class ConsumeLoop implements Runnable {
-    private final Logger log = LoggerFactory.getLogger(ConsumeLoop.class);
+/**
+ * 
+ * KConsumeLoop<K, V> is swapper of KafkaConsumer<K, V>
+ * @param <K> Key Type [byte[], String, Integer, Long, Float, Double]
+ * @param <V> Value Type [byte[], String, Integer, Long, Float, Double]
+ */
+public abstract class KConsumeLoop<K, V> implements Runnable {
+    private final Logger log = LoggerFactory.getLogger(KConsumeLoop.class);
 
-    private final KafkaConsumer<byte[], byte[]> consumer;
+    private final String name;
+    private final KafkaConsumer<K, V> consumer;
     private final List<String> topics;
     private final CountDownLatch shutdownLatch;
 
-    public ConsumeLoop(KafkaConsumer<byte[], byte[]> consumer, List<String> topics) {
-        this.consumer = consumer;
-        this.topics = topics;
-        this.shutdownLatch = new CountDownLatch(1);
+    public String getName() {
+        return name;
     }
+
+    public KafkaConsumer<K, V> getConsumer() {
+        return consumer;
+    }
+
+    public List<String> getTopics() {
+        return topics;
+    }
+
+//    public ConsumeLoop(KafkaConsumer<byte[], byte[]> consumer, List<String> topics) {
+//        this.consumer = consumer;
+//        this.topics = topics;
+//        this.shutdownLatch = new CountDownLatch(1);
+//    }
     
-    // ConsumerConfig ==> Importance.HIGH
-    public ConsumeLoop(Properties config, List<String> topics) {
-//        Properties config = new Properties();
-//        config.put("client.id", InetAddress.getLocalHost().getHostName());
-//        config.put("group.id", "foo");
-//        config.put("bootstrap.servers", "host1:9092,host2:9092");
-//        new KafkaConsumer<K, V>(config);
-
-        this.consumer = new KafkaConsumer<>(config);
+    public KConsumeLoop(String name, List<String> topics) {
+        this.name = name;
+        Properties props = KConfig.getConsumeConfig(name);
+        this.consumer = new KafkaConsumer<>(props);
         this.topics = topics;
         this.shutdownLatch = new CountDownLatch(1);
     }
 
-    public abstract void process(ConsumerRecord<byte[], byte[]> record);
+    public abstract void process(ConsumerRecord<K, V> record);
 
     @Override
     public void run() {
         try {
+            log.info("KConsumeLoop[" + name + "] is running on topics: " + topics);
             consumer.subscribe(topics);
             while (true) {
-                ConsumerRecords<byte[], byte[]> records = consumer.poll(Duration.ofMillis(Long.MAX_VALUE));
+                ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(Long.MAX_VALUE));
                 records.forEach(record -> process(record));
             }
         } catch (WakeupException e) {

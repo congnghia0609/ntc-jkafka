@@ -16,7 +16,10 @@
 
 package com.ntc.kafka.producer;
 
+import java.util.ArrayList;
+import java.util.concurrent.Future;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,26 +29,28 @@ import org.slf4j.LoggerFactory;
  * @author nghiatc
  * @since Sep 16, 2015
  */
-public class ProducerPush {
-	private static Logger logger = LoggerFactory.getLogger(ProducerPush.class);
+public class KProducerUtil {
+	private static Logger logger = LoggerFactory.getLogger(KProducerUtil.class);
 
-	public static void send(String topic, String msg) {
+	public static Future<RecordMetadata> sendRecordBytes(String name, String topic, String msg) {
 		try {
 			ProducerRecord<byte[], byte[]> record = new ProducerRecord<byte[], byte[]>(topic, msg.getBytes("UTF-8"));
-			ProducerExec.Instance.send(record);
+			KProducer<byte[], byte[]> kp = KProducer.getInstance(name);
+            return kp.getProducer().send(record);
 		} catch (Exception e) {
-			logger.error("error ", e);
+			logger.error("KProducerUtil send ", e);
 		}
-
+        return null;
 	}
 
-	public static void send(String topic, byte[] data) {
+	public static Future<RecordMetadata> sendRecordBytes(String name, String topic, byte[] data) {
 		try {
 			ProducerRecord<byte[], byte[]> record = new ProducerRecord<byte[], byte[]>(topic, data);
-			ProducerExec.Instance.send(record);
+			KProducer<byte[], byte[]> kp = KProducer.getInstance(name);
+            return kp.getProducer().send(record);
 		} catch (Exception e) {
-			logger.error("error ", e);
+			logger.error("KProducerUtil send ", e);
 		}
-
+        return null;
 	}
 }

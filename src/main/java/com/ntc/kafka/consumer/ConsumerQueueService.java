@@ -20,7 +20,6 @@
 //import java.util.LinkedList;
 //import java.util.List;
 //import java.util.Map;
-//import kafka.consumer.KafkaStream;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 //
@@ -30,23 +29,22 @@
 // * @author nghiatc
 // * @since Sep 16, 2015
 // */
-//public class ConsumerQueueService extends ConsumerConnect {
+//public class ConsumerQueueService {
 //	private final Logger _logger = LoggerFactory.getLogger(getClass());
-//	private List<ConsumerService> consumers = new LinkedList<ConsumerService>();
+//	private List<KConsumerService> consumers = new LinkedList<KConsumerService>();
 //
 //	public ConsumerQueueService() {}
 //
-//	@Override
 //	public int start() {
 //		try {
 //			Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
-//			for(ConsumerService consumer : consumers) {
+//			for(KConsumerService consumer : consumers) {
 //				topicCountMap.put(consumer.getTopic(), consumer.getNumThread());
 //			}
 //
 //		    Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = getConsumer().createMessageStreams(topicCountMap);
 //
-//		    for(ConsumerService consumer : consumers) {
+//		    for(KConsumerService consumer : consumers) {
 //		    	List<KafkaStream<byte[], byte[]>> streams =  consumerMap.get(consumer.getTopic());
 //			    consumer.assignAndRunStream(streams);
 //			    System.out.println("Add stream " + consumer.getTopic() + " success!");
@@ -61,7 +59,7 @@
 //		return 0;
 //	}
 //
-//	public void add(ConsumerService service) {
+//	public void add(KConsumerService service) {
 //		consumers.add(service);
 //	}
 //
