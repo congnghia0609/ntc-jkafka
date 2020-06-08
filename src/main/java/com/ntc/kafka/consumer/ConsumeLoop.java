@@ -46,6 +46,12 @@ public abstract class ConsumeLoop implements Runnable {
     
     // ConsumerConfig ==> Importance.HIGH
     public ConsumeLoop(Properties config, List<String> topics) {
+//        Properties config = new Properties();
+//        config.put("client.id", InetAddress.getLocalHost().getHostName());
+//        config.put("group.id", "foo");
+//        config.put("bootstrap.servers", "host1:9092,host2:9092");
+//        new KafkaConsumer<K, V>(config);
+
         this.consumer = new KafkaConsumer<>(config);
         this.topics = topics;
         this.shutdownLatch = new CountDownLatch(1);

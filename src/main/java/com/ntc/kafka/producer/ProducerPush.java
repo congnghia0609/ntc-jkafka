@@ -31,7 +31,7 @@ public class ProducerPush {
 
 	public static void send(String topic, String msg) {
 		try {
-			ProducerRecord<byte[], byte[]> record = new ProducerRecord<byte[], byte[]>(topic, msg.getBytes());
+			ProducerRecord<byte[], byte[]> record = new ProducerRecord<byte[], byte[]>(topic, msg.getBytes("UTF-8"));
 			ProducerExec.Instance.send(record);
 		} catch (Exception e) {
 			logger.error("error ", e);

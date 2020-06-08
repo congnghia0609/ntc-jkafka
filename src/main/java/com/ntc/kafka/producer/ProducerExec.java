@@ -52,6 +52,11 @@ public class ProducerExec {
 		props.put(ProducerConfig.CLIENT_ID_CONFIG, NConfig.getConfig().getString("kafka.clientId", "socket"));
 
 		producer = new KafkaProducer<byte[], byte[]>(props);
+//        Properties config = new Properties();
+//        config.put("client.id", InetAddress.getLocalHost().getHostName());
+//        config.put("bootstrap.servers", "host1:9092,host2:9092");
+//        config.put("acks", "all");
+//        new KafkaProducer<K, V>(config);
 	}
 
 	public void send(ProducerRecord<byte[], byte[]> record) {
