@@ -15,6 +15,7 @@
  */
 package com.ntc.kafka.consumer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,27 +27,29 @@ import org.slf4j.LoggerFactory;
  * @author nghiatc
  * @since Sep 16, 2015
  */
-public abstract class KConsumerService {
+public class KConsumerService {
 
     private final Logger log = LoggerFactory.getLogger(KConsumerService.class);
-    private List<KConsumeLoop> consumers;
+    private List<KConsumeLoop> consumers = new ArrayList<>();
+    private ExecutorService executor;
 
     public List<KConsumeLoop> getConsumers() {
         return consumers;
     }
 
-    private KConsumerService() {
+    public KConsumerService() {
     }
     
-    public KConsumerService(List<KConsumeLoop> consumers) {
-        this.consumers = consumers;
+    public boolean addKConsumer(KConsumeLoop consumer) {
+        return this.consumers.add(consumer);
     }
 
     public void start() {
         try {
-            ExecutorService executor = Executors.newFixedThreadPool(consumers.size());
+            executor = Executors.newFixedThreadPool(consumers.size());
             for (KConsumeLoop kcl : consumers) {
                 executor.execute(kcl);
+                System.out.println("####### KConsumeLoop[" + kcl.getId() + "] Start...");
             }
             log.info("KConsumerService start...");
         } catch (Exception e) {

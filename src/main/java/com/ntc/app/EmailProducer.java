@@ -16,20 +16,37 @@
 
 package com.ntc.app;
 
+import com.ntc.kafka.producer.KProducerUtil;
+import java.util.concurrent.Future;
+import org.apache.kafka.clients.producer.RecordMetadata;
+
 /**
  *
  * @author nghiatc
- * @since Jun 8, 2020
+ * @since Jun 9, 2020
  */
-public class MainApp {
+public class EmailProducer {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         try {
-            EmailService es = new EmailService(1);
-            es.start();
+            String name = "worker";
+            String topic = "email";
+            String msg = "This is email ";
+            
+            for (int i=0; i<10; i++) {
+                String newmsg = msg + i;
+                Future<RecordMetadata> ft = KProducerUtil.sendRecordBytes(name, topic, newmsg);
+                Thread.sleep(500);
+            }
+            Thread.sleep(2000);
+            System.out.println("EmailProducer End...");
+            
+//            Future<RecordMetadata> ft = KProducerUtil.sendRecordBytes(name, topic, msg);
+//            RecordMetadata rm = ft.get();
+//            System.out.println(rm.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

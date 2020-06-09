@@ -154,8 +154,8 @@
                     <archive>
                         <addMavenDescriptor>false</addMavenDescriptor>
                         <manifest>
-                            <!--<mainClass>com.ntc.app.MainApp</mainClass>-->
-                            <mainClass>com.ntc.kafka.util.KConfig</mainClass>
+                            <mainClass>com.ntc.app.MainApp</mainClass>
+                            <!--<mainClass>com.ntc.kafka.util.KConfig</mainClass>-->
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>

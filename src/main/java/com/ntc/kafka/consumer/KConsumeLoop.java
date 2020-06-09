@@ -19,6 +19,7 @@ import com.ntc.kafka.util.KConfig;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -33,17 +34,22 @@ import org.slf4j.LoggerFactory;
  */
 /**
  * 
- * KConsumeLoop<K, V> is swapper of KafkaConsumer<K, V>
+ * KConsumeLoop is swapper of KafkaConsumer
  * @param <K> Key Type [byte[], String, Integer, Long, Float, Double]
  * @param <V> Value Type [byte[], String, Integer, Long, Float, Double]
  */
 public abstract class KConsumeLoop<K, V> implements Runnable {
     private final Logger log = LoggerFactory.getLogger(KConsumeLoop.class);
 
+    private final String id;
     private final String name;
     private final KafkaConsumer<K, V> consumer;
     private final List<String> topics;
     private final CountDownLatch shutdownLatch;
+
+    public String getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -56,16 +62,19 @@ public abstract class KConsumeLoop<K, V> implements Runnable {
     public List<String> getTopics() {
         return topics;
     }
-
-//    public ConsumeLoop(KafkaConsumer<byte[], byte[]> consumer, List<String> topics) {
-//        this.consumer = consumer;
-//        this.topics = topics;
-//        this.shutdownLatch = new CountDownLatch(1);
-//    }
+    
+    public KConsumeLoop(Properties props, List<String> topics) {
+        this.id = props.getProperty(ConsumerConfig.CLIENT_ID_CONFIG, "customize");
+        this.name = id;
+        this.consumer = new KafkaConsumer<>(props);
+        this.topics = topics;
+        this.shutdownLatch = new CountDownLatch(1);
+    }
     
     public KConsumeLoop(String name, List<String> topics) {
-        this.name = name;
         Properties props = KConfig.getConsumeConfig(name);
+        this.id = props.getProperty(ConsumerConfig.CLIENT_ID_CONFIG, "customize");
+        this.name = name;
         this.consumer = new KafkaConsumer<>(props);
         this.topics = topics;
         this.shutdownLatch = new CountDownLatch(1);
@@ -76,10 +85,11 @@ public abstract class KConsumeLoop<K, V> implements Runnable {
     @Override
     public void run() {
         try {
-            log.info("KConsumeLoop[" + name + "] is running on topics: " + topics);
+            System.out.println("+++++++ KConsumeLoop[" + id + "] is running on topics: " + topics);
             consumer.subscribe(topics);
             while (true) {
-                ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(Long.MAX_VALUE));
+                //ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(Long.MAX_VALUE));
+                ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(500));
                 records.forEach(record -> process(record));
             }
         } catch (WakeupException e) {

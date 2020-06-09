@@ -48,7 +48,9 @@ public class KConfig {
                     props.put(cname, nvalue);
                 }
             }
-            props.put(ConsumerConfig.CLIENT_ID_CONFIG, name + "_consumer_" + UUID.randomUUID().toString());
+            String id = name + "_consumer_" + UUID.randomUUID().toString();
+            props.put(ConsumerConfig.CLIENT_ID_CONFIG, id);
+            props.put(ConsumerConfig.GROUP_INSTANCE_ID_CONFIG, id);
         } catch (Exception e) {
             log.error("getConsumeConfig " + e.toString(), e);
         }

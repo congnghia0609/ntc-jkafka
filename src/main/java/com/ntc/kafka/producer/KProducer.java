@@ -24,6 +24,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 
 
 /**
@@ -33,7 +34,7 @@ import org.apache.kafka.clients.producer.Producer;
  */
 /**
  * 
- * KProducer<K, V> is swapper of Kafka Producer<K, V>
+ * KProducer is swapper of Kafka Producer
  * @param <K> Key Type [byte[], String, Integer, Long, Float, Double]
  * @param <V> Value Type [byte[], String, Integer, Long, Float, Double]
  */
@@ -41,7 +42,17 @@ public class KProducer<K, V> {
 
     private static Map<String, KProducer> mapInstanceKProducer = new ConcurrentHashMap<String, KProducer>();
     private static Lock lockInstance = new ReentrantLock();
+    private String id;
+    private String name;
 	private Producer<K, V> producer;
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 
     public Producer<K, V> getProducer() {
         return producer;
@@ -50,8 +61,16 @@ public class KProducer<K, V> {
 	private KProducer() {
 	}
     
+    public KProducer(Properties props) {
+        id = props.getProperty(ProducerConfig.CLIENT_ID_CONFIG, "customize");
+        name = id;
+		producer = new KafkaProducer<>(props);
+	}
+    
     public KProducer(String name) {
         Properties props = KConfig.getProduceConfig(name);
+        id = props.getProperty(ProducerConfig.CLIENT_ID_CONFIG, "customize");
+        this.name = name;
 		producer = new KafkaProducer<>(props);
 	}
     

@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.ntc.kafka.producer;
 
-import java.util.ArrayList;
 import java.util.concurrent.Future;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  *
@@ -30,27 +27,28 @@ import org.slf4j.LoggerFactory;
  * @since Sep 16, 2015
  */
 public class KProducerUtil {
-	private static Logger logger = LoggerFactory.getLogger(KProducerUtil.class);
 
-	public static Future<RecordMetadata> sendRecordBytes(String name, String topic, String msg) {
-		try {
-			ProducerRecord<byte[], byte[]> record = new ProducerRecord<byte[], byte[]>(topic, msg.getBytes("UTF-8"));
-			KProducer<byte[], byte[]> kp = KProducer.getInstance(name);
-            return kp.getProducer().send(record);
-		} catch (Exception e) {
-			logger.error("KProducerUtil send ", e);
-		}
-        return null;
-	}
+    private static Logger logger = LoggerFactory.getLogger(KProducerUtil.class);
 
-	public static Future<RecordMetadata> sendRecordBytes(String name, String topic, byte[] data) {
-		try {
-			ProducerRecord<byte[], byte[]> record = new ProducerRecord<byte[], byte[]>(topic, data);
-			KProducer<byte[], byte[]> kp = KProducer.getInstance(name);
+    public static Future<RecordMetadata> sendRecordBytes(String name, String topic, String msg) {
+        try {
+            ProducerRecord<byte[], byte[]> record = new ProducerRecord<byte[], byte[]>(topic, msg.getBytes("UTF-8"));
+            KProducer<byte[], byte[]> kp = KProducer.getInstance(name);
             return kp.getProducer().send(record);
-		} catch (Exception e) {
-			logger.error("KProducerUtil send ", e);
-		}
+        } catch (Exception e) {
+            logger.error("KProducerUtil sendRecordBytes ", e);
+        }
         return null;
-	}
+    }
+
+    public static Future<RecordMetadata> sendRecordBytes(String name, String topic, byte[] data) {
+        try {
+            ProducerRecord<byte[], byte[]> record = new ProducerRecord<byte[], byte[]>(topic, data);
+            KProducer<byte[], byte[]> kp = KProducer.getInstance(name);
+            return kp.getProducer().send(record);
+        } catch (Exception e) {
+            logger.error("KProducerUtil sendRecordBytes ", e);
+        }
+        return null;
+    }
 }
