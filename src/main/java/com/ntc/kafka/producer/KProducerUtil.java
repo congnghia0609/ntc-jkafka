@@ -51,4 +51,26 @@ public class KProducerUtil {
         }
         return null;
     }
+    
+    public static Future<RecordMetadata> sendRecordKVBytes(String name, String topic, String key, String value) {
+        try {
+            ProducerRecord<byte[], byte[]> record = new ProducerRecord<byte[], byte[]>(topic, key.getBytes("UTF-8"), value.getBytes("UTF-8"));
+            KProducer<byte[], byte[]> kp = KProducer.getInstance(name);
+            return kp.getProducer().send(record);
+        } catch (Exception e) {
+            logger.error("KProducerUtil sendRecordKVBytes ", e);
+        }
+        return null;
+    }
+
+    public static Future<RecordMetadata> sendRecordKVBytes(String name, String topic, byte[] key, byte[] value) {
+        try {
+            ProducerRecord<byte[], byte[]> record = new ProducerRecord<byte[], byte[]>(topic, key, value);
+            KProducer<byte[], byte[]> kp = KProducer.getInstance(name);
+            return kp.getProducer().send(record);
+        } catch (Exception e) {
+            logger.error("KProducerUtil sendRecordKVBytes ", e);
+        }
+        return null;
+    }
 }
