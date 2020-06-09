@@ -45,6 +45,7 @@ public abstract class KConsumeLoop<K, V> implements Runnable {
     private final String name;
     private final KafkaConsumer<K, V> consumer;
     private final List<String> topics;
+    private final long pollTimeoutMs;
     private final CountDownLatch shutdownLatch;
 
     public String getId() {
@@ -62,12 +63,17 @@ public abstract class KConsumeLoop<K, V> implements Runnable {
     public List<String> getTopics() {
         return topics;
     }
+
+    public long getPollTimeoutMs() {
+        return pollTimeoutMs;
+    }
     
     public KConsumeLoop(Properties props, List<String> topics) {
         this.id = props.getProperty(ConsumerConfig.CLIENT_ID_CONFIG, "customize");
         this.name = id;
         this.consumer = new KafkaConsumer<>(props);
         this.topics = topics;
+        this.pollTimeoutMs = Long.valueOf(props.getProperty(KConfig.COMSUMER_POLL_TIMEOUT_MS, "500"));
         this.shutdownLatch = new CountDownLatch(1);
     }
     
@@ -77,6 +83,7 @@ public abstract class KConsumeLoop<K, V> implements Runnable {
         this.name = name;
         this.consumer = new KafkaConsumer<>(props);
         this.topics = topics;
+        this.pollTimeoutMs = Long.valueOf(props.getProperty(KConfig.COMSUMER_POLL_TIMEOUT_MS, "500"));
         this.shutdownLatch = new CountDownLatch(1);
     }
 
@@ -85,11 +92,11 @@ public abstract class KConsumeLoop<K, V> implements Runnable {
     @Override
     public void run() {
         try {
-            System.out.println("+++++++ KConsumeLoop[" + id + "] is running on topics: " + topics);
+            System.out.println("+++++++ KConsumeLoop[" + id + "] is running on topics: " + topics + ", pollTimeoutMs=" + pollTimeoutMs + "ms");
             consumer.subscribe(topics);
             while (true) {
                 //ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(Long.MAX_VALUE));
-                ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(500));
+                ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(pollTimeoutMs));
                 records.forEach(record -> process(record));
             }
         } catch (WakeupException e) {

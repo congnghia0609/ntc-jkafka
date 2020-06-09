@@ -37,6 +37,8 @@ public class KConfig {
     public static final String PRODUCER_PREFIX = ".kafka.producer.";
     public static final String STREAM_PREFIX = ".kafka.stream.";
     
+    public static final String COMSUMER_POLL_TIMEOUT_MS = "poll.timeout.ms";
+    
     public static Properties getConsumeConfig(String name) {
         Properties props = new Properties();
         try {
@@ -51,6 +53,10 @@ public class KConfig {
             String id = name + "_consumer_" + UUID.randomUUID().toString();
             props.put(ConsumerConfig.CLIENT_ID_CONFIG, id);
             props.put(ConsumerConfig.GROUP_INSTANCE_ID_CONFIG, id);
+            // Customize Properties
+            String pkey = name + COMSUMER_PREFIX + COMSUMER_POLL_TIMEOUT_MS;
+            String pollTimeout = String.valueOf(NConfig.getConfig().getLong(pkey, 500L));
+            props.put(COMSUMER_POLL_TIMEOUT_MS, pollTimeout);
         } catch (Exception e) {
             log.error("getConsumeConfig " + e.toString(), e);
         }
