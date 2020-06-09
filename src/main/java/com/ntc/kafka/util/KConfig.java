@@ -85,16 +85,16 @@ public class KConfig {
         Properties props = new Properties();
         try {
             Set<String> setName = StreamsConfig.configDef().names();
-            for (String pname : setName) {
-                String nkey = name + STREAM_PREFIX + pname;
+            for (String sname : setName) {
+                String nkey = name + STREAM_PREFIX + sname;
                 Object nvalue = NConfig.getConfig().containsKey(nkey) ? NConfig.getConfig().getProperty(nkey) : null;
                 if (nvalue != null) {
-                    props.put(pname, nvalue);
+                    props.put(sname, nvalue);
                 }
             }
             props.put(StreamsConfig.CLIENT_ID_CONFIG, name + "_stream_" + UUID.randomUUID().toString());
         } catch (Exception e) {
-            log.error("getProduceConfig " + e.toString(), e);
+            log.error("getStreamConfig " + e.toString(), e);
         }
         return props;
     }

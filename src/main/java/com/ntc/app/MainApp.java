@@ -28,8 +28,27 @@ public class MainApp {
      */
     public static void main(String[] args) {
         try {
-            EmailService es = new EmailService(1);
-            es.start();
+            //EmailService es = new EmailService(1);
+            //es.start();
+            
+            /** Example Kafka Streams Start **/
+            WordCountConsumer wcc = new WordCountConsumer(1);
+            wcc.start();
+
+            /**
+             * Để chạy Streams thành công ta phải tạo các topic bằng tay trước, với các lệnh sau:
+             * 
+             * == Step 3: Prepare input topic and start Kafka producer
+             * 
+             * # Create the input topic named "streams-plaintext-input" and the output topic named "streams-wordcount-output":
+             * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-plaintext-input
+             * 
+             * # Create the output topic with "compaction" enabled because the output stream is a changelog stream
+             * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-wordcount-output --config cleanup.policy=compact
+             */
+            WordCountStream wcs = new WordCountStream();
+            wcs.start();
+            /** Example Kafka Streams End **/
         } catch (Exception e) {
             e.printStackTrace();
         }
