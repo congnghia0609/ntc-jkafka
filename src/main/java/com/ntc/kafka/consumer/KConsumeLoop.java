@@ -69,7 +69,7 @@ public abstract class KConsumeLoop<K, V> implements Runnable {
     }
     
     public KConsumeLoop(Properties props, List<String> topics) {
-        this.id = props.getProperty(ConsumerConfig.CLIENT_ID_CONFIG, "customize");
+        this.id = props.getProperty(ConsumerConfig.CLIENT_ID_CONFIG, "KConsumeLoop_" + UUID.randomUUID().toString());
         this.name = id;
         this.consumer = new KafkaConsumer<>(props);
         this.topics = topics;
@@ -79,7 +79,7 @@ public abstract class KConsumeLoop<K, V> implements Runnable {
     
     public KConsumeLoop(String name, List<String> topics) {
         Properties props = KConfig.getConsumeConfig(name);
-        this.id = props.getProperty(ConsumerConfig.CLIENT_ID_CONFIG, "customize");
+        this.id = props.getProperty(ConsumerConfig.CLIENT_ID_CONFIG, name + "_consumer_" + UUID.randomUUID().toString());
         this.name = name;
         this.consumer = new KafkaConsumer<>(props);
         this.topics = topics;

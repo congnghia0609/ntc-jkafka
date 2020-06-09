@@ -19,6 +19,7 @@ package com.ntc.kafka.producer;
 import com.ntc.kafka.util.KConfig;
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -62,14 +63,14 @@ public class KProducer<K, V> {
 	}
     
     public KProducer(Properties props) {
-        id = props.getProperty(ProducerConfig.CLIENT_ID_CONFIG, "customize");
+        id = props.getProperty(ProducerConfig.CLIENT_ID_CONFIG, "KProducer_" + UUID.randomUUID().toString());
         name = id;
 		producer = new KafkaProducer<>(props);
 	}
     
     public KProducer(String name) {
         Properties props = KConfig.getProduceConfig(name);
-        id = props.getProperty(ProducerConfig.CLIENT_ID_CONFIG, "customize");
+        id = props.getProperty(ProducerConfig.CLIENT_ID_CONFIG, name + "_producer_" + UUID.randomUUID().toString());
         this.name = name;
 		producer = new KafkaProducer<>(props);
 	}
