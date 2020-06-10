@@ -34,11 +34,34 @@ public class MainApp {
             
             
             //// Lab 2: Kafka Streams
-            /** Example Kafka Streams Start **/
-            WordCountConsumer wcc = new WordCountConsumer(1);
-            wcc.start();
-
+//            /** Example Kafka Streams Start **/
+//            WordCountConsumer wcc = new WordCountConsumer(1);
+//            wcc.start();
+//
+//            /**
+//             * Để chạy Streams thành công ta phải tạo các topic bằng tay trước, với các lệnh sau:
+//             * 
+//             * == Step 3: Prepare input topic and start Kafka producer
+//             * 
+//             * # Create the input topic named "streams-plaintext-input" and the output topic named "streams-wordcount-output":
+//             * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-plaintext-input
+//             * 
+//             * # Create the output topic with "compaction" enabled because the output stream is a changelog stream
+//             * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-wordcount-output --config cleanup.policy=compact
+//             */
+//            WordCountStream wcs = new WordCountStream();
+//            wcs.start();
+//            /** Example Kafka Streams End **/
+            
+            
+            //// Lab 3: Kafka Streams Processor
+            /** Example Kafka Streams Processor Start **/
+//            WordCountProcessorConsumer wcpc = new WordCountProcessorConsumer(1);
+//            wcpc.start();
+            
             /**
+             * @param args the command line arguments
+             * 
              * Để chạy Streams thành công ta phải tạo các topic bằng tay trước, với các lệnh sau:
              * 
              * == Step 3: Prepare input topic and start Kafka producer
@@ -47,11 +70,12 @@ public class MainApp {
              * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-plaintext-input
              * 
              * # Create the output topic with "compaction" enabled because the output stream is a changelog stream
-             * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-wordcount-output --config cleanup.policy=compact
+             * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-wordcount-processor-output --config cleanup.policy=compact
+             * 
              */
-            WordCountStream wcs = new WordCountStream();
-            wcs.start();
-            /** Example Kafka Streams End **/
+            WordCountProcessor wcp = new WordCountProcessor();
+            wcp.start();
+            /** Example Kafka Streams Processor End **/
         } catch (Exception e) {
             e.printStackTrace();
         }

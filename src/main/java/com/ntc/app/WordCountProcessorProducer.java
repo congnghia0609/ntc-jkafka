@@ -26,7 +26,7 @@ import org.apache.kafka.clients.producer.RecordMetadata;
  * @author nghiatc
  * @since Jun 9, 2020
  */
-public class WordCountProducer {
+public class WordCountProcessorProducer {
 
     /**
      * @param args the command line arguments
@@ -41,14 +41,11 @@ public class WordCountProducer {
             msgs.add("join kafka summit");
             
             for (String line : msgs) {
-                String[] listWords = line.split(" ");
-                for (String word : listWords) {
-                    Future<RecordMetadata> ft = KProducerUtil.sendRecordBytes(name, topic, word);
-                }
+                Future<RecordMetadata> ft = KProducerUtil.sendRecordBytes(name, topic, line);
                 Thread.sleep(1000);
             }
             Thread.sleep(2000);
-            System.out.println("WordCountProducer End...");
+            System.out.println("WordCountProcessorProducer End...");
         } catch (Exception e) {
             e.printStackTrace();
         }
