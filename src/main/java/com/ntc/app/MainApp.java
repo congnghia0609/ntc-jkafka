@@ -28,9 +28,12 @@ public class MainApp {
      */
     public static void main(String[] args) {
         try {
+            //// Lab 1: Kafka Queue & Pub-Sub
             //EmailService es = new EmailService(1);
             //es.start();
             
+            
+            //// Lab 2: Kafka Streams
             /** Example Kafka Streams Start **/
             WordCountConsumer wcc = new WordCountConsumer(1);
             wcc.start();
