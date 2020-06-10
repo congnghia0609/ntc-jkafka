@@ -57,4 +57,13 @@ public class KConsumerService {
         }
     }
 
+    public void stop() {
+        for (KConsumeLoop kcl : consumers) {
+            try {
+                kcl.shutdown();
+            } catch (Exception e) {
+                log.error("KConsumerService stop " + e.toString());
+            }
+        }
+    }
 }

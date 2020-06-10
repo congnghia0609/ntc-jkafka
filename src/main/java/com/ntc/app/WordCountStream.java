@@ -38,6 +38,8 @@ public class WordCountStream {
 
     public static final String INPUT_TOPIC = "streams-plaintext-input";
     public static final String OUTPUT_TOPIC = "streams-wordcount-output";
+    private KafkaStreams streams;
+    private CountDownLatch latch = new CountDownLatch(1);
 
     public Properties getStreamsConfig() {
         Properties props = KConfig.getStreamConfig("wordcount");
@@ -62,8 +64,7 @@ public class WordCountStream {
         System.out.println("$$$$$" + props.toString());
         StreamsBuilder builder = new StreamsBuilder();
         createWordCountStream(builder);
-        KafkaStreams streams = new KafkaStreams(builder.build(), props);
-        CountDownLatch latch = new CountDownLatch(1);
+        streams = new KafkaStreams(builder.build(), props);
         
         // attach shutdown handler to catch control-c
         Runtime.getRuntime().addShutdownHook(new Thread("streams-wordcount-shutdown-hook"){
@@ -82,4 +83,14 @@ public class WordCountStream {
         }
     }
     
+    public void stop() {
+        try {
+            if (streams != null) {
+                streams.close();
+            }
+            latch.countDown();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

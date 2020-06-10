@@ -55,6 +55,14 @@ public class WordCountConsumer {
         }
     }
     
+    public void stop() {
+        try {
+            service.stop();
+        } catch (Exception e) {
+            log.error("WordCountConsumer stop " + e.toString(), e);
+        }
+    }
+    
     public class WordCountWorker extends KConsumeLoop<String, Long> {
 
         public WordCountWorker(String name, List<String> topics) {
@@ -70,7 +78,7 @@ public class WordCountConsumer {
                 long value = record.value();
                 System.out.println("topic: " + topic + ", key: " + key + ", value: " + value);
                 //System.out.println(record.toString());
-                Thread.sleep(200);
+                //Thread.sleep(200);
             } catch (Exception e) {
                 log.error("WordCountWorker process " + e.toString(), e);
             }

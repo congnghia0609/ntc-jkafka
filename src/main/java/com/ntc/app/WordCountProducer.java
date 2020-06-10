@@ -45,7 +45,7 @@ public class WordCountProducer {
                 for (String word : listWords) {
                     Future<RecordMetadata> ft = KProducerUtil.sendRecordBytes(name, topic, word);
                 }
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             }
             Thread.sleep(2000);
             System.out.println("WordCountProducer End...");

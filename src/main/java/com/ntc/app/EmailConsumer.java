@@ -28,15 +28,15 @@ import org.slf4j.LoggerFactory;
  * @author nghiatc
  * @since Jun 8, 2020
  */
-public class EmailService {
-    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
+public class EmailConsumer {
+    private static final Logger log = LoggerFactory.getLogger(EmailConsumer.class);
     
     private int numWorker = 1;
     private KConsumerService service = new KConsumerService();
     private final String name = "worker";
     private List<String> topics = new ArrayList<>();
 
-    public EmailService(int numWorker) {
+    public EmailConsumer(int numWorker) {
         this.numWorker = numWorker > 0 ? numWorker : 1;
         this.topics.add("email");
         for (int i=0; i<this.numWorker; i++) {
@@ -49,7 +49,15 @@ public class EmailService {
         try {
             service.start();
         } catch (Exception e) {
-            log.error("EmailService start " + e.toString(), e);
+            log.error("EmailConsumer start " + e.toString(), e);
+        }
+    }
+    
+    public void stop() {
+        try {
+            service.stop();
+        } catch (Exception e) {
+            log.error("EmailConsumer stop " + e.toString(), e);
         }
     }
     
