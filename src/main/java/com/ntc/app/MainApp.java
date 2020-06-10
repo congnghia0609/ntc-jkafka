@@ -56,8 +56,8 @@ public class MainApp {
             
             //// Lab 3: Kafka Streams Processor
             /** Example Kafka Streams Processor Start **/
-//            WordCountProcessorConsumer wcpc = new WordCountProcessorConsumer(1);
-//            wcpc.start();
+            WordCountProcessorConsumer wcpc = new WordCountProcessorConsumer(1);
+            wcpc.start();
             
             /**
              * @param args the command line arguments

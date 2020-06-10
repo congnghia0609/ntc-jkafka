@@ -42,7 +42,7 @@ public class WordCountProcessorProducer {
             
             for (String line : msgs) {
                 Future<RecordMetadata> ft = KProducerUtil.sendRecordBytes(name, topic, line);
-                Thread.sleep(1000);
+                Thread.sleep(500);
             }
             Thread.sleep(2000);
             System.out.println("WordCountProcessorProducer End...");

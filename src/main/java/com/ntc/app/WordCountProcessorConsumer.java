@@ -63,19 +63,19 @@ public class WordCountProcessorConsumer {
         }
     }
     
-    public class WordCountWorker extends KConsumeLoop<String, Integer> {
+    public class WordCountWorker extends KConsumeLoop<byte[], byte[]> {
 
         public WordCountWorker(String name, List<String> topics) {
             super(name, topics);
         }
 
         @Override
-        public void process(ConsumerRecord<String, Integer> record) {
+        public void process(ConsumerRecord<byte[], byte[]> record) {
             try {
                 //System.out.println("====== WordCountWorker[" + getId() + "] is process ======");
                 String topic = record.topic();
-                String key = record.key();
-                int value = record.value();
+                String key = new String(record.key());
+                String value = new String(record.value());
                 System.out.println("topic: " + topic + ", key: " + key + ", value: " + value);
                 //System.out.println(record.toString());
                 //Thread.sleep(200);

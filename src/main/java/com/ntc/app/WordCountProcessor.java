@@ -64,7 +64,7 @@ public class WordCountProcessor {
                 @Override
                 public void init(ProcessorContext context) {
                     this.context = context;
-                    this.context.schedule(Duration.ofSeconds(1), PunctuationType.STREAM_TIME, timestamp -> {
+                    this.context.schedule(Duration.ofMillis(100), PunctuationType.STREAM_TIME, timestamp -> {
                         try (KeyValueIterator<String, Integer> iter = kvStore.all()) {
                             System.out.println("----------- " + timestamp + " ----------- ");
                             
@@ -75,19 +75,21 @@ public class WordCountProcessor {
                             }
                         }
                     });
-                    this.kvStore = (KeyValueStore<String, Integer>) context.getStateStore("Counts");
+                    this.kvStore = (KeyValueStore<String, Integer>) context.getStateStore(NAME_STORE);
                 }
 
                 @Override
                 public void process(String key, String value) {
+                    System.out.println("process value: " + value);
                     String[] words = value.toLowerCase(Locale.getDefault()).split(" ");
                     for (String word : words) {
-                        Integer oldValue = this.kvStore.get(word);
-                        if (oldValue == null) {
-                            this.kvStore.put(word, 1);
+                        Integer counter = this.kvStore.get(word);
+                        if (counter == null) {
+                            counter = 1;
                         } else {
-                            this.kvStore.put(word, oldValue + 1);
+                            counter += 1;
                         }
+                        this.kvStore.put(word, counter);
                     }
                     context.commit();
                 }
@@ -115,7 +117,8 @@ public class WordCountProcessor {
         Topology topo = new Topology();
         topo.addSource(NAME_SOURCE, INPUT_TOPIC);
         topo.addProcessor(NAME_PROCESS, new WCProcessorSuplier(), NAME_SOURCE);
-        topo.addStateStore(Stores.keyValueStoreBuilder(Stores.inMemoryKeyValueStore(NAME_STORE),
+        topo.addStateStore(Stores.keyValueStoreBuilder(
+                Stores.inMemoryKeyValueStore(NAME_STORE),
                 Serdes.String(),
                 Serdes.Integer()),
                 NAME_PROCESS);
