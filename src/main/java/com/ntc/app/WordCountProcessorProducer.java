@@ -33,7 +33,7 @@ public class WordCountProcessorProducer {
      */
     public static void main(String[] args) {
         try {
-            String name = "wordcount";
+            String name = "wordcountprocessor";
             String topic = "streams-plaintext-input";
             List<String> msgs = new ArrayList<>();
             msgs.add("all streams lead to kafka");
