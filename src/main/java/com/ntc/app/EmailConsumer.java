@@ -76,7 +76,7 @@ public class EmailConsumer {
                 String value = new String(record.value(), "UTF-8");
                 System.out.println("topic: " + topic + ", value: " + value);
                 System.out.println(record.toString());
-                Thread.sleep(200);
+                //Thread.sleep(200);
             } catch (Exception e) {
                 log.error("EmailWorker process " + e.toString(), e);
             }

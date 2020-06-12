@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.streetcodevn</groupId>
     <artifactId>ntc-jkafka</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
     <name>ntc-jkafka</name>
     <description>ntc-jkafka is module kafka java client</description>
@@ -155,7 +155,6 @@
                         <addMavenDescriptor>false</addMavenDescriptor>
                         <manifest>
                             <mainClass>com.ntc.app.MainApp</mainClass>
-                            <!--<mainClass>com.ntc.kafka.util.KConfig</mainClass>-->
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
