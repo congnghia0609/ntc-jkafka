@@ -34,11 +34,12 @@ public class EmailConsumer {
     private int numWorker = 1;
     private KConsumerService service = new KConsumerService();
     private final String name = "worker";
+    private final String topic = "email";
     private List<String> topics = new ArrayList<>();
 
     public EmailConsumer(int numWorker) {
         this.numWorker = numWorker > 0 ? numWorker : 1;
-        this.topics.add("email");
+        this.topics.add(topic);
         for (int i=0; i<this.numWorker; i++) {
             EmailWorker ew = new EmailWorker(name, topics);
             service.addKConsumer(ew);
@@ -70,7 +71,7 @@ public class EmailConsumer {
         @Override
         public void process(ConsumerRecord<byte[], byte[]> record) {
             try {
-                System.out.println("====== EmailWorker[" + getId() + "] is process ======");
+                System.out.println("====== EmailWorker[" + getId() + "] process ======");
                 String topic = record.topic();
                 //String key = new String(record.key(), "UTF-8");
                 String value = new String(record.value(), "UTF-8");

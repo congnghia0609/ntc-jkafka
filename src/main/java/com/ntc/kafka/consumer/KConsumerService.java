@@ -49,7 +49,7 @@ public class KConsumerService {
             executor = Executors.newFixedThreadPool(consumers.size());
             for (KConsumeLoop kcl : consumers) {
                 executor.execute(kcl);
-                System.out.println("####### KConsumeLoop[" + kcl.getId() + "] Start...");
+                System.out.println("####### KConsumeLoop[" + kcl.getId() + "] start...");
             }
             log.info("KConsumerService start...");
         } catch (Exception e) {
