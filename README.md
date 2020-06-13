@@ -1,5 +1,5 @@
 # ntc-jkafka
-ntc-jkafka is module kafka java client.
+ntc-jkafka is a module java kafka client.
 
 ## Maven
 ```Xml
@@ -13,6 +13,10 @@ ntc-jkafka is module kafka java client.
 ## Usage
 ### Producer
 ```java
+String name = "worker";
+String topic = KConfig.getProduceTopic(name, "email");
+String msg = "This is email";
+
 // Way 1: Short code
 Future<RecordMetadata> ft = KProducerUtil.sendRecordBytes(name, topic, msg);
 
@@ -31,14 +35,11 @@ public class EmailConsumer {
     private int numWorker = 1;
     private KConsumerService service = new KConsumerService();
     private final String name = "worker";
-    private final String topic = "email";
-    private List<String> topics = new ArrayList<>();
 
     public EmailConsumer(int numWorker) {
         this.numWorker = numWorker > 0 ? numWorker : 1;
-        this.topics.add(topic);
         for (int i=0; i<this.numWorker; i++) {
-            EmailWorker ew = new EmailWorker(name, topics);
+            EmailWorker ew = new EmailWorker(name);
             service.addKConsumer(ew);
         }
     }
@@ -61,8 +62,8 @@ public class EmailConsumer {
     
     public class EmailWorker extends KConsumeLoop<byte[], byte[]> {
 
-        public EmailWorker(String name, List<String> topics) {
-            super(name, topics);
+        public EmailWorker(String name) {
+            super(name);
         }
 
         @Override
@@ -73,7 +74,7 @@ public class EmailConsumer {
                 //String key = new String(record.key(), "UTF-8");
                 String value = new String(record.value(), "UTF-8");
                 System.out.println("topic: " + topic + ", value: " + value);
-                System.out.println(record.toString());
+                //System.out.println(record.toString());
             } catch (Exception e) {
                 log.error("EmailWorker process " + e.toString(), e);
             }
