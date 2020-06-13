@@ -72,17 +72,23 @@ public abstract class KConsumeLoop<K, V> implements Runnable {
         this.id = props.getProperty(ConsumerConfig.CLIENT_ID_CONFIG, "KConsumeLoop_" + UUID.randomUUID().toString());
         this.name = id;
         this.consumer = new KafkaConsumer<>(props);
+        if (topics == null || topics.isEmpty()) {
+            throw new ExceptionInInitializerError("topics is NULL or empty.");
+        }
         this.topics = topics;
         this.pollTimeoutMs = Long.valueOf(props.getProperty(KConfig.COMSUMER_POLL_TIMEOUT_MS, "500"));
         this.shutdownLatch = new CountDownLatch(1);
     }
     
-    public KConsumeLoop(String name, List<String> topics) {
+    public KConsumeLoop(String name) {
         Properties props = KConfig.getConsumeConfig(name);
         this.id = props.getProperty(ConsumerConfig.CLIENT_ID_CONFIG, name + "_consumer_" + UUID.randomUUID().toString());
         this.name = name;
         this.consumer = new KafkaConsumer<>(props);
-        this.topics = topics;
+        this.topics = KConfig.getConsumeTopics(name);
+        if (topics == null || topics.isEmpty()) {
+            throw new ExceptionInInitializerError("Not found config topics.");
+        }
         this.pollTimeoutMs = Long.valueOf(props.getProperty(KConfig.COMSUMER_POLL_TIMEOUT_MS, "500"));
         this.shutdownLatch = new CountDownLatch(1);
     }

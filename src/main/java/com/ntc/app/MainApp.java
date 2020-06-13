@@ -29,8 +29,8 @@ public class MainApp {
     public static void main(String[] args) {
         try {
             //// Lab 1: Kafka Queue & Pub-Sub
-            //EmailService es = new EmailService(1);
-            //es.start();
+            EmailConsumer ec = new EmailConsumer(1);
+            ec.start();
             
             
             //// Lab 2: Kafka Streams
@@ -55,27 +55,27 @@ public class MainApp {
             
             
             //// Lab 3: Kafka Streams Processor
-            /** Example Kafka Streams Processor Start **/
-            WordCountProcessorConsumer wcpc = new WordCountProcessorConsumer(1);
-            wcpc.start();
-            
-            /**
-             * @param args the command line arguments
-             * 
-             * Để chạy Streams thành công ta phải tạo các topic bằng tay trước, với các lệnh sau:
-             * 
-             * == Step 3: Prepare input topic and start Kafka producer
-             * 
-             * # Create the input topic named "streams-plaintext-input" and the output topic named "streams-wordcount-output":
-             * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-plaintext-input
-             * 
-             * # Create the output topic with "compaction" enabled because the output stream is a changelog stream
-             * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-wordcount-processor-output --config cleanup.policy=compact
-             * 
-             */
-            WordCountProcessor wcp = new WordCountProcessor();
-            wcp.start();
-            /** Example Kafka Streams Processor End **/
+//            /** Example Kafka Streams Processor Start **/
+//            WordCountProcessorConsumer wcpc = new WordCountProcessorConsumer(1);
+//            wcpc.start();
+//            
+//            /**
+//             * @param args the command line arguments
+//             * 
+//             * Để chạy Streams thành công ta phải tạo các topic bằng tay trước, với các lệnh sau:
+//             * 
+//             * == Step 3: Prepare input topic and start Kafka producer
+//             * 
+//             * # Create the input topic named "streams-plaintext-input" and the output topic named "streams-wordcount-output":
+//             * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-plaintext-input
+//             * 
+//             * # Create the output topic with "compaction" enabled because the output stream is a changelog stream
+//             * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-wordcount-processor-output --config cleanup.policy=compact
+//             * 
+//             */
+//            WordCountProcessor wcp = new WordCountProcessor();
+//            wcp.start();
+//            /** Example Kafka Streams Processor End **/
         } catch (Exception e) {
             e.printStackTrace();
         }

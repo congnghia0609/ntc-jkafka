@@ -18,8 +18,6 @@ package com.ntc.app;
 
 import com.ntc.kafka.consumer.KConsumeLoop;
 import com.ntc.kafka.consumer.KConsumerService;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,14 +33,11 @@ public class WordCountProcessorConsumer {
     private int numWorker = 1;
     private KConsumerService service = new KConsumerService();
     private final String name = "wordcountprocessor";
-    private final String topic = "streams-wordcount-processor-output";
-    private List<String> topics = new ArrayList<>();
 
     public WordCountProcessorConsumer(int numWorker) {
         this.numWorker = numWorker > 0 ? numWorker : 1;
-        this.topics.add(topic);
         for (int i=0; i<this.numWorker; i++) {
-            WordCountWorker wcw = new WordCountWorker(name, topics);
+            WordCountWorker wcw = new WordCountWorker(name);
             service.addKConsumer(wcw);
         }
     }
@@ -65,8 +60,8 @@ public class WordCountProcessorConsumer {
     
     public class WordCountWorker extends KConsumeLoop<byte[], byte[]> {
 
-        public WordCountWorker(String name, List<String> topics) {
-            super(name, topics);
+        public WordCountWorker(String name) {
+            super(name);
         }
 
         @Override

@@ -35,14 +35,11 @@ public class WordCountConsumer {
     private int numWorker = 1;
     private KConsumerService service = new KConsumerService();
     private final String name = "wordcount";
-    private final String topic = "streams-wordcount-output";
-    private List<String> topics = new ArrayList<>();
 
     public WordCountConsumer(int numWorker) {
         this.numWorker = numWorker > 0 ? numWorker : 1;
-        this.topics.add(topic);
         for (int i=0; i<this.numWorker; i++) {
-            WordCountWorker wcw = new WordCountWorker(name, topics);
+            WordCountWorker wcw = new WordCountWorker(name);
             service.addKConsumer(wcw);
         }
     }
@@ -65,8 +62,8 @@ public class WordCountConsumer {
     
     public class WordCountWorker extends KConsumeLoop<String, Long> {
 
-        public WordCountWorker(String name, List<String> topics) {
-            super(name, topics);
+        public WordCountWorker(String name) {
+            super(name);
         }
 
         @Override

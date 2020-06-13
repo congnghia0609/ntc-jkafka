@@ -38,6 +38,8 @@ public class KConfig {
     public static final String STREAM_PREFIX = ".kafka.stream.";
     
     public static final String COMSUMER_POLL_TIMEOUT_MS = "poll.timeout.ms";
+    public static final String COMSUMER_TOPICS = "topics";
+    public static final String PRODUCER_TOPIC = "topic";
     
     public static Properties getConsumeConfig(String name) {
         Properties props = new Properties();
@@ -57,10 +59,26 @@ public class KConfig {
             String pkey = name + COMSUMER_PREFIX + COMSUMER_POLL_TIMEOUT_MS;
             String pollTimeout = String.valueOf(NConfig.getConfig().getLong(pkey, 500L));
             props.put(COMSUMER_POLL_TIMEOUT_MS, pollTimeout);
+            String tkey = name + COMSUMER_PREFIX + COMSUMER_TOPICS;
+            String topics = NConfig.getConfig().getString(tkey, "");
+            props.put(COMSUMER_TOPICS, topics);
         } catch (Exception e) {
             log.error("getConsumeConfig " + e.toString(), e);
         }
         return props;
+    }
+    
+    public static List<String> getConsumeTopics(String name) {
+        try {
+            String tkey = name + COMSUMER_PREFIX + COMSUMER_TOPICS;
+            String topics = NConfig.getConfig().getString(tkey, "");
+            if (topics != null && !topics.isEmpty()) {
+                return new ArrayList<>(Arrays.asList(topics.split(",")));
+            }
+        } catch (Exception e) {
+            log.error("getConsumeTopics " + e.toString(), e);
+        }
+        return null;
     }
     
     public static Properties getProduceConfig(String name) {
@@ -75,10 +93,37 @@ public class KConfig {
                 }
             }
             props.put(ProducerConfig.CLIENT_ID_CONFIG, name + "_producer_" + UUID.randomUUID().toString());
+            // Customize Properties
+            String tkey = name + PRODUCER_PREFIX + PRODUCER_TOPIC;
+            String topic = NConfig.getConfig().getString(tkey, "");
+            props.put(PRODUCER_TOPIC, topic);
         } catch (Exception e) {
             log.error("getProduceConfig " + e.toString(), e);
         }
         return props;
+    }
+    
+    public static List<String> getProduceTopics(String name) {
+        try {
+            String tkey = name + PRODUCER_PREFIX + PRODUCER_TOPIC;
+            String topics = NConfig.getConfig().getString(tkey, "");
+            if (topics != null && !topics.isEmpty()) {
+                return new ArrayList<>(Arrays.asList(topics.split(",")));
+            }
+        } catch (Exception e) {
+            log.error("getProduceTopics " + e.toString(), e);
+        }
+        return null;
+    }
+    
+    public static String getProduceTopic(String name, String defaultValue) {
+        try {
+            String tkey = name + PRODUCER_PREFIX + PRODUCER_TOPIC;
+            return NConfig.getConfig().getString(tkey, defaultValue);
+        } catch (Exception e) {
+            log.error("getProduceTopic " + e.toString(), e);
+        }
+        return null;
     }
     
     public static Properties getStreamConfig(String name) {

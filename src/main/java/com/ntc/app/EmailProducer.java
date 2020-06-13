@@ -17,6 +17,7 @@
 package com.ntc.app;
 
 import com.ntc.kafka.producer.KProducerUtil;
+import com.ntc.kafka.util.KConfig;
 import java.util.concurrent.Future;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
@@ -33,7 +34,7 @@ public class EmailProducer {
     public static void main(String[] args) {
         try {
             String name = "worker";
-            String topic = "email";
+            String topic = KConfig.getProduceTopic(name, "email");
             String msg = "This is email ";
             
             for (int i=0; i<10; i++) {

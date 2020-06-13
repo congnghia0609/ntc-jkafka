@@ -17,6 +17,7 @@
 package com.ntc.app;
 
 import com.ntc.kafka.producer.KProducerUtil;
+import com.ntc.kafka.util.KConfig;
 import java.util.*;
 import java.util.concurrent.Future;
 import org.apache.kafka.clients.producer.RecordMetadata;
@@ -34,7 +35,7 @@ public class WordCountProcessorProducer {
     public static void main(String[] args) {
         try {
             String name = "wordcountprocessor";
-            String topic = "streams-plaintext-input";
+            String topic = KConfig.getProduceTopic(name, "streams-plaintext-input");
             List<String> msgs = new ArrayList<>();
             msgs.add("all streams lead to kafka");
             msgs.add("hello kafka streams");

@@ -18,7 +18,6 @@ package com.ntc.app;
 
 import com.ntc.kafka.consumer.KConsumeLoop;
 import com.ntc.kafka.consumer.KConsumerService;
-import java.util.*;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,14 +33,11 @@ public class EmailConsumer {
     private int numWorker = 1;
     private KConsumerService service = new KConsumerService();
     private final String name = "worker";
-    private final String topic = "email";
-    private List<String> topics = new ArrayList<>();
 
     public EmailConsumer(int numWorker) {
         this.numWorker = numWorker > 0 ? numWorker : 1;
-        this.topics.add(topic);
         for (int i=0; i<this.numWorker; i++) {
-            EmailWorker ew = new EmailWorker(name, topics);
+            EmailWorker ew = new EmailWorker(name);
             service.addKConsumer(ew);
         }
     }
@@ -64,8 +60,8 @@ public class EmailConsumer {
     
     public class EmailWorker extends KConsumeLoop<byte[], byte[]> {
 
-        public EmailWorker(String name, List<String> topics) {
-            super(name, topics);
+        public EmailWorker(String name) {
+            super(name);
         }
 
         @Override
