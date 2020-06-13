@@ -33,10 +33,11 @@ import org.slf4j.LoggerFactory;
 public class KConfig {
     
     private static final Logger log = LoggerFactory.getLogger(KConfig.class);
+    
     public static final String COMSUMER_PREFIX = ".kafka.consumer.";
     public static final String PRODUCER_PREFIX = ".kafka.producer.";
     public static final String STREAM_PREFIX = ".kafka.stream.";
-    
+    // This is property additional.
     public static final String COMSUMER_POLL_TIMEOUT_MS = "poll.timeout.ms";
     public static final String COMSUMER_TOPICS = "topics";
     public static final String PRODUCER_TOPIC = "topic";
