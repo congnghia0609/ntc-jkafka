@@ -69,17 +69,20 @@ public class KConfig {
         return props;
     }
     
-    public static List<String> getConsumeTopics(String name) {
+    public static List<String> getConsumeTopics(String name, String defaultValue) {
+        List<String> rs = new ArrayList<>();
         try {
             String tkey = name + COMSUMER_PREFIX + COMSUMER_TOPICS;
             String topics = NConfig.getConfig().getString(tkey, "");
             if (topics != null && !topics.isEmpty()) {
-                return new ArrayList<>(Arrays.asList(topics.split(",")));
+                rs.addAll(Arrays.asList(topics.split(",")));
+            } else if (defaultValue != null && !defaultValue.isEmpty()) {
+                rs.add(defaultValue);
             }
         } catch (Exception e) {
             log.error("getConsumeTopics " + e.toString(), e);
         }
-        return null;
+        return rs;
     }
     
     public static Properties getProduceConfig(String name) {
@@ -104,17 +107,20 @@ public class KConfig {
         return props;
     }
     
-    public static List<String> getProduceTopics(String name) {
+    public static List<String> getProduceTopics(String name, String defaultValue) {
+        List<String> rs = new ArrayList<>();
         try {
             String tkey = name + PRODUCER_PREFIX + PRODUCER_TOPIC;
             String topics = NConfig.getConfig().getString(tkey, "");
             if (topics != null && !topics.isEmpty()) {
-                return new ArrayList<>(Arrays.asList(topics.split(",")));
+                rs.addAll(Arrays.asList(topics.split(",")));
+            } else if (defaultValue != null && !defaultValue.isEmpty()) {
+                rs.add(defaultValue);
             }
         } catch (Exception e) {
             log.error("getProduceTopics " + e.toString(), e);
         }
-        return null;
+        return rs;
     }
     
     public static String getProduceTopic(String name, String defaultValue) {
@@ -157,7 +163,7 @@ public class KConfig {
             
             //test5();
             
-            test6();
+            //test6();
         } catch (Exception e) {
             e.printStackTrace();
         }

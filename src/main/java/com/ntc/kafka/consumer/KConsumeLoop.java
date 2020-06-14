@@ -85,7 +85,7 @@ public abstract class KConsumeLoop<K, V> implements Runnable {
         this.id = props.getProperty(ConsumerConfig.CLIENT_ID_CONFIG, name + "_consumer_" + UUID.randomUUID().toString());
         this.name = name;
         this.consumer = new KafkaConsumer<>(props);
-        this.topics = KConfig.getConsumeTopics(name);
+        this.topics = KConfig.getConsumeTopics(name, null);
         if (topics == null || topics.isEmpty()) {
             throw new ExceptionInInitializerError("Not found config topics.");
         }
