@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ntc.app;
+package com.ntc.app.example;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

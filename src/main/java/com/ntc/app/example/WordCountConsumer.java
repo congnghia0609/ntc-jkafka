@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ntc.app;
+package com.ntc.app.example;
 
 import com.ntc.kafka.consumer.KConsumeLoop;
 import com.ntc.kafka.consumer.KConsumerService;
@@ -25,20 +25,20 @@ import org.slf4j.LoggerFactory;
 /**
  *
  * @author nghiatc
- * @since Jun 8, 2020
+ * @since Jun 9, 2020
  */
-public class EmailConsumer {
-    private static final Logger log = LoggerFactory.getLogger(EmailConsumer.class);
+public class WordCountConsumer {
+    private static final Logger log = LoggerFactory.getLogger(WordCountConsumer.class);
     
     private int numWorker = 1;
     private KConsumerService service = new KConsumerService();
-    private final String name = "worker";
+    private final String name = "wordcount";
 
-    public EmailConsumer(int numWorker) {
+    public WordCountConsumer(int numWorker) {
         this.numWorker = numWorker > 0 ? numWorker : 1;
         for (int i=0; i<this.numWorker; i++) {
-            EmailWorker ew = new EmailWorker(name);
-            service.addKConsumer(ew);
+            WordCountWorker wcw = new WordCountWorker(name);
+            service.addKConsumer(wcw);
         }
     }
     
@@ -46,7 +46,7 @@ public class EmailConsumer {
         try {
             service.start();
         } catch (Exception e) {
-            log.error("EmailConsumer start " + e.toString(), e);
+            log.error("WordCountConsumer start " + e.toString(), e);
         }
     }
     
@@ -54,28 +54,28 @@ public class EmailConsumer {
         try {
             service.stop();
         } catch (Exception e) {
-            log.error("EmailConsumer stop " + e.toString(), e);
+            log.error("WordCountConsumer stop " + e.toString(), e);
         }
     }
     
-    public class EmailWorker extends KConsumeLoop<byte[], byte[]> {
+    public class WordCountWorker extends KConsumeLoop<String, Long> {
 
-        public EmailWorker(String name) {
+        public WordCountWorker(String name) {
             super(name);
         }
 
         @Override
-        public void process(ConsumerRecord<byte[], byte[]> record) {
+        public void process(ConsumerRecord<String, Long> record) {
             try {
-                System.out.println("====== EmailWorker[" + getId() + "] process ======");
+                //System.out.println("====== WordCountWorker[" + getId() + "] is process ======");
                 String topic = record.topic();
-                //String key = new String(record.key(), "UTF-8");
-                String value = new String(record.value(), "UTF-8");
-                System.out.println("topic: " + topic + ", value: " + value);
-                System.out.println(record.toString());
+                String key = record.key();
+                long value = record.value();
+                System.out.println("topic: " + topic + ", key: " + key + ", value: " + value);
+                //System.out.println(record.toString());
                 //Thread.sleep(200);
             } catch (Exception e) {
-                log.error("EmailWorker process " + e.toString(), e);
+                log.error("WordCountWorker process " + e.toString(), e);
             }
         }
     }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ntc.app;
+package com.ntc.app.example;
 
 import com.ntc.kafka.util.KConfig;
 import java.time.Duration;

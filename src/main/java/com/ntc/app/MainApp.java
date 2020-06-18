@@ -16,6 +16,8 @@
 
 package com.ntc.app;
 
+import com.ntc.app.example.EmailConsumer;
+
 /**
  *
  * @author nghiatc

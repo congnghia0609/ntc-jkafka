@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package com.ntc.app;
+package com.ntc.app.example;
 
 import com.ntc.kafka.consumer.KConsumeLoop;
 import com.ntc.kafka.consumer.KConsumerService;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,14 +27,14 @@ import org.slf4j.LoggerFactory;
  * @author nghiatc
  * @since Jun 9, 2020
  */
-public class WordCountConsumer {
-    private static final Logger log = LoggerFactory.getLogger(WordCountConsumer.class);
+public class WordCountProcessorConsumer {
+    private static final Logger log = LoggerFactory.getLogger(WordCountProcessorConsumer.class);
     
     private int numWorker = 1;
     private KConsumerService service = new KConsumerService();
-    private final String name = "wordcount";
+    private final String name = "wordcountprocessor";
 
-    public WordCountConsumer(int numWorker) {
+    public WordCountProcessorConsumer(int numWorker) {
         this.numWorker = numWorker > 0 ? numWorker : 1;
         for (int i=0; i<this.numWorker; i++) {
             WordCountWorker wcw = new WordCountWorker(name);
@@ -48,7 +46,7 @@ public class WordCountConsumer {
         try {
             service.start();
         } catch (Exception e) {
-            log.error("WordCountConsumer start " + e.toString(), e);
+            log.error("WordCountProcessorConsumer start " + e.toString(), e);
         }
     }
     
@@ -56,23 +54,23 @@ public class WordCountConsumer {
         try {
             service.stop();
         } catch (Exception e) {
-            log.error("WordCountConsumer stop " + e.toString(), e);
+            log.error("WordCountProcessorConsumer stop " + e.toString(), e);
         }
     }
     
-    public class WordCountWorker extends KConsumeLoop<String, Long> {
+    public class WordCountWorker extends KConsumeLoop<byte[], byte[]> {
 
         public WordCountWorker(String name) {
             super(name);
         }
 
         @Override
-        public void process(ConsumerRecord<String, Long> record) {
+        public void process(ConsumerRecord<byte[], byte[]> record) {
             try {
                 //System.out.println("====== WordCountWorker[" + getId() + "] is process ======");
                 String topic = record.topic();
-                String key = record.key();
-                long value = record.value();
+                String key = new String(record.key());
+                String value = new String(record.value());
                 System.out.println("topic: " + topic + ", key: " + key + ", value: " + value);
                 //System.out.println(record.toString());
                 //Thread.sleep(200);
