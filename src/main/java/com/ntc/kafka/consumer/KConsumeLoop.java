@@ -101,7 +101,6 @@ public abstract class KConsumeLoop<K, V> implements Runnable {
             System.out.println("+++++++ KConsumeLoop[" + id + "] is running on topics: " + topics + ", pollTimeoutMs=" + pollTimeoutMs + "ms");
             consumer.subscribe(topics);
             while (true) {
-                //ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(Long.MAX_VALUE));
                 ConsumerRecords<K, V> records = consumer.poll(Duration.ofMillis(pollTimeoutMs));
                 records.forEach(record -> process(record));
             }
